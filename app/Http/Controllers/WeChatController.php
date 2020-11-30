@@ -35,37 +35,39 @@ class WeChatController extends Controller
         $message = $this->app->server->forceValidate()->getMessage();
         Log::info('wechat message：' . json_encode($message, JSON_UNESCAPED_UNICODE));
 
-        switch ($message['MsgType']) {
-            case 'event':
-                $text = '收到事件消息';
-                break;
-            case 'text':
-                $text = '收到文字消息';
-                break;
-            case 'image':
-                $text = '收到图片消息';
-                break;
-            case 'voice':
-                $text = '收到语音消息';
-                break;
-            case 'video':
-                $text = '收到视频消息';
-                break;
-            case 'location':
-                $text = '收到坐标消息';
-                break;
-            case 'link':
-                $text = '收到链接消息';
-                break;
-            case 'file':
-                $text = '收到文件消息';
-                break;
-            // ... 其它消息
-            default:
-                $text = '收到其它消息';
-        }
+        $this->app->server->push(function ($message) {
+            switch ($message['MsgType']) {
+                case 'event':
+                    return '收到事件消息';
+                    break;
+                case 'text':
+                    return '收到文字消息';
+                    break;
+                case 'image':
+                    return '收到图片消息';
+                    break;
+                case 'voice':
+                    return '收到语音消息';
+                    break;
+                case 'video':
+                    return '收到视频消息';
+                    break;
+                case 'location':
+                    return '收到坐标消息';
+                    break;
+                case 'link':
+                    return '收到链接消息';
+                    break;
+                case 'file':
+                    return '收到文件消息';
+                    break;
+                // ... 其它消息
+                default:
+                    return '收到其它消息';
+            }
 
-        return new Text($text);
+        });
+
         // 在 laravel 中：
         $response = $this->app->server->serve();
         // $response 为 `Symfony\Component\HttpFoundation\Response` 实例
