@@ -3,16 +3,39 @@
 namespace App\Http\Controllers;
 
 use App\Models\Article;
+use EasyWeChat\Factory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
 class WeChatController extends Controller
 {
+    public $app = null;
+
+    public function __construct()
+    {
+        $config = [
+            'app_id' => config('wechat.appid'),
+            'secret' => config('wechat.secret'),
+
+            // 指定 API 调用返回结果的类型：array(default)/collection/object/raw/自定义类名
+            'response_type' => 'array',
+
+            //...
+        ];
+
+        $this->app = Factory::officialAccount($config);
+    }
+
     public function index(Request $request)
     {
         $param = $request->all();
         Log::info('wechat：' . json_encode($param, JSON_UNESCAPED_UNICODE));
-        return 'index';
+
+        // 在 laravel 中：
+        $response = $this->app->server->serve();
+        // $response 为 `Symfony\Component\HttpFoundation\Response` 实例
+        // 而 laravel 中直接返回即可：
+        return $response;
     }
 
     /**
