@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Article;
 use EasyWeChat\Factory;
+use EasyWeChat\Kernel\Messages\Text;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -36,33 +37,34 @@ class WeChatController extends Controller
 
         switch ($message['MsgType']) {
             case 'event':
-                return '收到事件消息';
+                $text = '收到事件消息';
                 break;
             case 'text':
-                return '收到文字消息';
+                $text = '收到文字消息';
                 break;
             case 'image':
-                return '收到图片消息';
+                $text = '收到图片消息';
                 break;
             case 'voice':
-                return '收到语音消息';
+                $text = '收到语音消息';
                 break;
             case 'video':
-                return '收到视频消息';
+                $text = '收到视频消息';
                 break;
             case 'location':
-                return '收到坐标消息';
+                $text = '收到坐标消息';
                 break;
             case 'link':
-                return '收到链接消息';
+                $text = '收到链接消息';
                 break;
             case 'file':
-                return '收到文件消息';
+                $text = '收到文件消息';
             // ... 其它消息
             default:
-                return '收到其它消息';
-                break;
+                $text = '收到其它消息';
         }
+
+        return new Text($text);
         // 在 laravel 中：
         $response = $this->app->server->serve();
         // $response 为 `Symfony\Component\HttpFoundation\Response` 实例
