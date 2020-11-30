@@ -59,6 +59,7 @@ class WeChatController extends Controller
                 break;
             case 'file':
                 $text = '收到文件消息';
+                break;
             // ... 其它消息
             default:
                 $text = '收到其它消息';
