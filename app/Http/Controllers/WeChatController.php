@@ -33,7 +33,7 @@ class WeChatController extends Controller
         Log::info('wechat：' . json_encode($param, JSON_UNESCAPED_UNICODE));
 
         // 验证消息
-        $message = $this->app->server->validate()->getMessage();
+        $message = $this->app->server->forceValidate()->getMessage();
         Log::info('wechat message：' . json_encode($message, JSON_UNESCAPED_UNICODE));
 
         // 在 laravel 中：
