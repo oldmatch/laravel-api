@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::any('/wechat', 'WeChatController@index');
+Route::any('/wechat/menu', 'WeChatController@menu');
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
