@@ -16,6 +16,7 @@ class WeChatController extends Controller
         $config = [
             'app_id' => config('wechat.appid'),
             'secret' => config('wechat.secret'),
+            'token' => config('wechat.token'),
 
             // 指定 API 调用返回结果的类型：array(default)/collection/object/raw/自定义类名
             'response_type' => 'array',
@@ -30,6 +31,10 @@ class WeChatController extends Controller
     {
         $param = $request->all();
         Log::info('wechat：' . json_encode($param, JSON_UNESCAPED_UNICODE));
+
+        // 验证消息
+        $message = $this->app->server->validate()->getMessage();
+        Log::info('wechat message：' . json_encode($message, JSON_UNESCAPED_UNICODE));
 
         // 在 laravel 中：
         $response = $this->app->server->serve();
