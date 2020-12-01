@@ -2,9 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Article;
+use App\Helper\ExtendHelper;
 use EasyWeChat\Factory;
-use EasyWeChat\Kernel\Messages\Text;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 
@@ -38,6 +37,9 @@ class WeChatController extends Controller
         $this->app->server->push(function ($message) {
             switch ($message['MsgType']) {
                 case 'event':
+                    if ($message['Event'] == 'CLICK') {
+                        return $this->click($message['EventKey']);
+                    }
                     return '收到事件消息';
                     break;
                 case 'text':
@@ -75,6 +77,29 @@ class WeChatController extends Controller
         return $response;
     }
 
+    private function click($EventKey)
+    {
+        // 点击事件
+        switch ($EventKey) {
+            case 'weather_shenzhen':
+            case 'weather_dongguan':
+            case 'weather_zhanjiang':
+            case 'weather_zhuhai':
+                $arr = [
+                    'weather_shenzhen' => '深圳',
+                    'weather_dongguan' => '东莞',
+                    'weather_zhanjiang' => '湛江',
+                    'weather_zhuhai' => '珠海',
+                ];
+
+                $city = $arr[$EventKey] ?? '深圳';
+
+                return ExtendHelper::weather($city);
+            default:
+                return ExtendHelper::weather('深圳');
+        }
+    }
+
     /**
      * Title for current resource.
      *
@@ -84,7 +109,39 @@ class WeChatController extends Controller
 
     public function menu()
     {
-        $list = $this->app->menu->list();
-        dump($list);die;
+        $buttons = [
+//            [
+//                "type" => "click",
+//                "name" => "今日歌曲",
+//                "key"  => "V1001_TODAY_MUSIC"
+//            ],
+            [
+                "name"       => "今日天气",
+                "sub_button" => [
+                    [
+                        "type" => "click",
+                        "name" => "深圳",
+                        "key" => "weather_shenzhen"
+                    ],
+                    [
+                        "type" => "click",
+                        "name" => "东莞",
+                        "key" => "weather_dongguan"
+                    ],
+                    [
+                        "type" => "click",
+                        "name" => "湛江",
+                        "key" => "weather_zhanjiang"
+                    ],
+                    [
+                        "type" => "click",
+                        "name" => "珠海",
+                        "key" => "weather_zhuhai"
+                    ],
+                ],
+            ],
+        ];
+        $this->app->menu->create($buttons);
+        dump($this->app->menu->current());die;
     }
 }
