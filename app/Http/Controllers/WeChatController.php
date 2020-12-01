@@ -95,6 +95,11 @@ class WeChatController extends Controller
                 $city = $arr[$EventKey] ?? '深圳';
 
                 return ExtendHelper::weather($city);
+                break;
+            case 'today_history':
+                // 历史上的今天
+                return ExtendHelper::todayHistory();
+                break;
             default:
                 return ExtendHelper::weather('深圳');
         }
@@ -109,12 +114,18 @@ class WeChatController extends Controller
 
     public function menu()
     {
+        dump(ExtendHelper::todayHistory());die;
         $buttons = [
-//            [
-//                "type" => "click",
-//                "name" => "今日歌曲",
-//                "key"  => "V1001_TODAY_MUSIC"
-//            ],
+            [
+                "name"       => "下班了",
+                "sub_button" => [
+                    [
+                        "type" => "click",
+                        "name" => "历史上的今天",
+                        "key" => "today_history"
+                    ],
+                ],
+            ],
             [
                 "name"       => "今日天气",
                 "sub_button" => [

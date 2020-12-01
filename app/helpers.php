@@ -7,6 +7,7 @@ function curl_request($url, $post = 'get', $data = [], $header = [], $time_limit
     //设置基本参数
     //设置返回值不直接输出
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+    curl_setopt($ch, CURLOPT_FOLLOWLOCATION, 1);
     curl_setopt($ch, CURLOPT_URL, $url);
 
     //设置超时时长

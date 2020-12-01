@@ -27,4 +27,22 @@ class ExtendHelper {
 
         return $weather ?? '查无数据';
     }
+
+    /**
+     * 历史上的今天
+     * @return bool|mixed|string
+     * author lkz <oldmatch24@gmail.com>
+     */
+    public static function todayHistory()
+    {
+        $data = curl_request('https://api.asilu.com/today');
+        if (!empty($data)) {
+            $data = json_decode($data, true);
+            $data = $data['data'];
+            // 随机返回一个
+            $data = $data[array_rand($data)]['title'] ?? '暂无历史';
+        }
+
+        return $data;
+    }
 }
